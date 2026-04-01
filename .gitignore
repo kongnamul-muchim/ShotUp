@@ -1,0 +1,51 @@
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.pid
+*.meta
+*.exe
+*.dll
+*.manifest
+*.pdb
+*.mdb
+*.exe.meta
+*.dll.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity Cache
+*.cache
+UnityPackageManager/
+ProjectSettings/ProjectVersion.txt
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Packages
+Packages/packages-lock.json
+
+# Except docs build
+!docs/Build/
+!docs/TemplateData/
+!docs/index.html
