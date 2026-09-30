@@ -13,29 +13,29 @@ namespace BallShotGame.Services
         /// </summary>
         /// <param name="force">발사 힘</param>
         void Launch(Vector2 force);
-        
+
         /// <summary>
         /// 공이 정지 상태인지 확인
         /// </summary>
         /// <returns>정지 여부</returns>
         bool IsStopped();
-        
+
         /// <summary>
         /// 공 리셋
         /// </summary>
         void Reset();
-        
+
         /// <summary>
         /// 현재 속도 가져오기
         /// </summary>
         /// <returns>속도</returns>
         float GetCurrentVelocity();
-        
+
         /// <summary>
         /// 충돌 감지 시 호출
         /// </summary>
         void OnCollision();
-        
+
         /// <summary>
         /// Rigidbody2D 참조 설정
         /// </summary>

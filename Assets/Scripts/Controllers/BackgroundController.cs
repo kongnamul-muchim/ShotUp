@@ -11,13 +11,13 @@ namespace BallShotGame.Controllers
         [Header("Target Settings")]
         [SerializeField] private Transform target;
         [SerializeField] private string targetTag = "Player";
-        
+
         [Header("Follow Settings")]
         [SerializeField] private float smoothSpeed = 0.125f;
         [SerializeField] private Vector2 offset = Vector2.zero;
         [SerializeField] private bool lockZ = true;
         [SerializeField] private float zPosition = 0f;
-        
+
         private Transform _transform;
 
         private void Awake()
@@ -49,17 +49,17 @@ namespace BallShotGame.Controllers
 
             // 타겟 위치 계산 (offset 적용)
             Vector2 desiredPosition = (Vector2)target.position + offset;
-            
+
             // 부드러운 이동 (Lerp)
             Vector2 smoothedPosition = Vector2.Lerp(
-                (Vector2)_transform.position, 
-                desiredPosition, 
+                (Vector2)_transform.position,
+                desiredPosition,
                 smoothSpeed
             );
 
             // Z축 처리
             float z = lockZ ? zPosition : _transform.position.z;
-            
+
             // 위치 적용
             _transform.position = new Vector3(smoothedPosition.x, smoothedPosition.y, z);
         }
@@ -83,7 +83,7 @@ namespace BallShotGame.Controllers
         private void OnDrawGizmosSelected()
         {
             if (target == null) return;
-            
+
             Gizmos.color = Color.cyan;
             Gizmos.DrawLine(transform.position, target.position);
             Gizmos.DrawWireSphere(target.position, 0.5f);

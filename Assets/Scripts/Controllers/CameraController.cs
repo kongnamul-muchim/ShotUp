@@ -11,17 +11,17 @@ namespace BallShotGame.Controllers
         [Header("Target Settings")]
         [SerializeField] private Transform target;
         [SerializeField] private string targetTag = "Player";
-        
+
         [Header("Follow Settings")]
         [Tooltip("낮을수록 더 부드러움 (0.02 ~ 0.15 추천)")]
         [SerializeField] private float smoothSpeed = 0.08f;
         [SerializeField] private Vector3 offset = new Vector3(0, 0, -10);
         [Tooltip("카메라 최대 이동 속도 (흔들림 방지)")]
         [SerializeField] private float maxCameraSpeed = 15f;
-        
+
         private Vector3 _currentVelocity;
         private Rigidbody2D _targetRb;
-        
+
         [Header("Bounds")]
         [SerializeField] private bool useBounds = false;
         [SerializeField] private Vector2 minBounds;
@@ -56,7 +56,7 @@ namespace BallShotGame.Controllers
 
             // 타겟 위치 + 오프셋
             Vector3 desiredPosition = target.position + offset;
-            
+
             // Bounds 적용 (선택적)
             if (useBounds)
             {
@@ -74,11 +74,11 @@ namespace BallShotGame.Controllers
                 dynamicSmoothTime = smoothSpeed + (targetSpeed * 0.005f);
                 dynamicSmoothTime = Mathf.Clamp(dynamicSmoothTime, smoothSpeed, smoothSpeed * 2f);
             }
-            
+
             Vector3 smoothedPosition = Vector3.SmoothDamp(
-                transform.position, 
-                desiredPosition, 
-                ref _currentVelocity, 
+                transform.position,
+                desiredPosition,
+                ref _currentVelocity,
                 dynamicSmoothTime,
                 maxCameraSpeed  // 최대 속도 제한
             );
@@ -97,7 +97,7 @@ namespace BallShotGame.Controllers
         private void OnDrawGizmosSelected()
         {
             if (target == null) return;
-            
+
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, target.position);
             Gizmos.DrawWireSphere(target.position, 0.5f);

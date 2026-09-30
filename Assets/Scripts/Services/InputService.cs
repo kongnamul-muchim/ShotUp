@@ -35,12 +35,12 @@ namespace BallShotGame.Services
         public void SetDragging(bool isDragging)
         {
             _isDragging = isDragging;
-            
+
             if (isDragging)
             {
                 _dragStartPosition = GetMouseWorldPosition();
                 _dragStartTime = Time.time;
-                
+
                 EventBus.Instance.Publish(new InputMouseDownEvent
                 {
                     Position = _dragStartPosition,

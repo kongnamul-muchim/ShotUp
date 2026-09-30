@@ -32,7 +32,7 @@ namespace BallShotGame.Controllers
         {
             // 이벤트 구독
             EventBus.Instance.Subscribe<GoalReachedEvent>(OnGoalReached);
-            
+
             Debug.Log("GameController started");
         }
 
@@ -45,7 +45,7 @@ namespace BallShotGame.Controllers
             GameService.Instance.Register<IBallService>(new BallService());
             GameService.Instance.Register<IInputService>(new InputService());
             GameService.Instance.Register<IGoalService>(new GoalService());
-            
+
             Debug.Log("All services registered");
         }
 
@@ -55,7 +55,7 @@ namespace BallShotGame.Controllers
         private void OnGoalReached(GoalReachedEvent evt)
         {
             Debug.Log($"Goal reached at {evt.GoalPosition}! Starting reset coroutine...");
-            
+
             // 3초 후 리셋
             StartCoroutine(ResetAfterDelay(GameConfig.ResetDelay));
         }
@@ -66,20 +66,20 @@ namespace BallShotGame.Controllers
         private IEnumerator ResetAfterDelay(float delay)
         {
             Debug.Log($"Resetting in {delay} seconds...");
-            
+
             yield return new WaitForSeconds(delay);
-            
+
             // 리셋 이벤트 발행
             EventBus.Instance.Publish(new ResetRequestedEvent
             {
                 Reason = ResetReason.GoalReached,
                 Delay = 0f
             });
-            
+
             // 골 상태 리셋
             var goalService = GameService.Instance.Get<IGoalService>();
             goalService?.ResetGoal();
-            
+
             Debug.Log("Game reset completed");
         }
 
@@ -102,13 +102,13 @@ namespace BallShotGame.Controllers
         {
             // 모든 서비스 종료
             GameService.Instance.DisposeAll();
-            
+
             // 초기화 플래그 리셋
             _isInitialized = false;
-            
+
             // 다시 초기화
             InitializeServices();
-            
+
             Debug.Log("Game restarted");
         }
 

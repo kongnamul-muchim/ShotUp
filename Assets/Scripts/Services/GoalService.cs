@@ -28,9 +28,9 @@ namespace BallShotGame.Services
         public void SetGoalReached()
         {
             if (_isGoalReached) return;
-            
+
             _isGoalReached = true;
-            
+
             EventBus.Instance.Publish(new GoalReachedEvent
             {
                 GoalPosition = Vector2.zero, // 필요시 실제 위치로 수정

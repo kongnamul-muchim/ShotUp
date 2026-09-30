@@ -36,7 +36,7 @@ namespace BallShotGame.Controllers
             if (other.CompareTag("Player") || other.name.Contains("Ball") || other.name.Contains("Player"))
             {
                 Debug.Log("Goal triggered by: " + other.name);
-                
+
                 // 골인 처리
                 _goalService?.SetGoalReached();
             }

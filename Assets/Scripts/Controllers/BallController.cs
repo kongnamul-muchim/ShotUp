@@ -13,10 +13,10 @@ namespace BallShotGame.Controllers
     public class BallController : MonoBehaviour
     {
         [SerializeField] private Rigidbody2D rb;
-        
+
         private IBallService _ballService;
         private IInputService _inputService;
-        
+
         private bool _isDragging = false;
         private Vector2 _dragStartPos;
         private Vector2 _currentMousePos;
@@ -26,7 +26,7 @@ namespace BallShotGame.Controllers
             // Rigidbody 설정
             if (rb == null)
                 rb = GetComponent<Rigidbody2D>();
-            
+
             // 탄성 설정 (벽에 튕기도록)
             if (rb != null)
             {
@@ -43,9 +43,9 @@ namespace BallShotGame.Controllers
             // DI에서 서비스 조회 (GameController Awake 이후)
             _ballService = GameService.Instance.Get<IBallService>();
             _inputService = GameService.Instance.Get<IInputService>();
-            
+
             _ballService?.SetRigidbody(rb);
-            
+
             // 이벤트 구독
             EventBus.Instance.Subscribe<InputMouseDownEvent>(HandleMouseDownEvent);
             EventBus.Instance.Subscribe<InputMouseDragEvent>(HandleMouseDragEvent);
@@ -60,7 +60,7 @@ namespace BallShotGame.Controllers
             {
                 ballService.Update();
             }
-            
+
             // 마우스 입력 처리
             HandleMouseInput();
         }
@@ -69,14 +69,14 @@ namespace BallShotGame.Controllers
         {
             // 서비스 초기화 확인
             if (_ballService == null) return;
-            
+
             // 공이 정지 상태일 때만 드래그 가능
             if (!_ballService.IsStopped()) return;
-            
+
             if (Input.GetMouseButtonDown(0))
             {
                 Vector2 mousePos = GetMouseWorldPosition();
-                
+
                 // 공을 클릭했는지 확인
                 float distance = Vector2.Distance(mousePos, transform.position);
                 if (distance < GameConfig.BallClickRadius) // 클릭 범위
@@ -99,9 +99,9 @@ namespace BallShotGame.Controllers
             _isDragging = true;
             _dragStartPos = position;
             _currentMousePos = position;
-            
+
             _inputService?.SetDragging(true);
-            
+
             EventBus.Instance.Publish(new BallDragStartedEvent
             {
                 StartPosition = _dragStartPos,
@@ -112,7 +112,7 @@ namespace BallShotGame.Controllers
         private void UpdateDrag(Vector2 position)
         {
             _currentMousePos = position;
-            
+
             EventBus.Instance.Publish(new BallDragUpdatedEvent
             {
                 CurrentPosition = _currentMousePos,
@@ -123,23 +123,23 @@ namespace BallShotGame.Controllers
         private void EndDrag()
         {
             _isDragging = false;
-            
+
             _inputService?.SetDragging(false);
-            
+
             // 발사 힘 계산
             Vector2 dragVector = _dragStartPos - _currentMousePos;
             float dragDistance = dragVector.magnitude;
-            
+
             // 최소/최대 힘 적용
             if (dragDistance < GameConfig.MinLaunchForce)
             {
                 Debug.Log("Drag too short, not launching");
                 return;
             }
-            
+
             // 힘 계산: 드래그 거리 × 계수
             Vector2 force = dragVector.normalized * Mathf.Min(dragDistance * GameConfig.ForceMultiplier, GameConfig.MaxLaunchForce);
-            
+
             _ballService?.Launch(force);
         }
 
@@ -187,24 +187,24 @@ namespace BallShotGame.Controllers
         private void OnCollisionEnter2D(Collision2D collision)
         {
             Debug.Log($"[COLLISION] Hit: {collision.gameObject.name}, Tag: {collision.gameObject.tag}");
-            
+
             // 충돌 지점 확인
             if (collision.contacts.Length == 0)
             {
                 Debug.LogWarning("[COLLISION] No contact points!");
                 return;
             }
-            
+
             // 충돌 각도 계산 (위쪽으로부터의 각도)
             Vector2 normal = collision.contacts[0].normal;
             float angle = Vector2.Angle(normal, Vector2.up);
-            
+
             Debug.Log($"[COLLISION] Normal: {normal}, Angle from UP: {angle:F1}°");
-            
+
             // 땅바닥인지 확인 (위쪽 노멀 벡터에 가까움 = 땅)
             // 벽은 옆쪽(90도), 천장은 아래쪽(180도)
             bool isGround = angle < GameConfig.GroundDetectionAngle;  // 땅으로 간주
-            
+
             if (isGround)
             {
                 // 땅에 닿았을 때만 저항 적용

@@ -94,11 +94,11 @@ namespace BallShotGame.Services
             {
                 Vector2 velocity = _rigidbody.linearVelocity;
                 float horizontalSpeed = Mathf.Abs(velocity.x);
-                
+
                 // 매우 약한 감속만 적용 (관성 유지)
                 // 0.995 = 0.5% 감소 (천천히 멈춤)
                 float damping = 0.995f;
-                
+
                 // 속도가 매우 낮아질 때만 조금 더 강하게
                 if (horizontalSpeed < 0.5f)
                 {
@@ -108,11 +108,11 @@ namespace BallShotGame.Services
                 {
                     damping = 0.95f;  // 5% 감소 (급격히)
                 }
-                
+
                 // X축만 감쇄, Y축(중력)은 유지
                 velocity.x *= damping;
                 _rigidbody.linearVelocity = velocity;
-                
+
                 // 각속도도 천천히 감쇄
                 _rigidbody.angularVelocity *= 0.99f;
             }
@@ -122,13 +122,13 @@ namespace BallShotGame.Services
             if (horizontalVelocity < GameConfig.StopThreshold)
             {
                 _isStopped = true;
-                
+
                 // 수평 속도만 0으로, 수직은 유지
                 Vector2 finalVelocity = _rigidbody.linearVelocity;
                 finalVelocity.x = 0f;
                 _rigidbody.linearVelocity = finalVelocity;
                 _rigidbody.angularVelocity = 0f;
-                
+
                 EventBus.Instance.Publish(new BallStoppedEvent
                 {
                     StopPosition = _rigidbody.position,

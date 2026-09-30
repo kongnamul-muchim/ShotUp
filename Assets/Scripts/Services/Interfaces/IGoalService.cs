@@ -13,12 +13,12 @@ namespace BallShotGame.Services
         /// </summary>
         /// <returns>골인 여부</returns>
         bool IsGoalReached();
-        
+
         /// <summary>
         /// 골인 처리
         /// </summary>
         void SetGoalReached();
-        
+
         /// <summary>
         /// 골인 상태 리셋
         /// </summary>
